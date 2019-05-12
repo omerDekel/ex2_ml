@@ -37,6 +37,6 @@ class Perceptron:
             if (i_y != int(y_hat)):
                 M_per = M_per + 1
             print (y_hat)
-            #hiiiiiiiiiii
+            #hiiiiiiiiiii aaaa
         print ("perceptron err" , float(M_per)/m)
 
