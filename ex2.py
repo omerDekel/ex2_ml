@@ -1,5 +1,6 @@
 import numpy as np
 import perceptron
+import PassiveAgressive
 def parse_data(file_name_x='train_x.txt', file_name_y ='train_y.txt'):
     """
     Parse data from file.
@@ -25,9 +26,12 @@ def main():
     train_y = []
     train_x, train_y = parse_data()
     test_x, test_y = parse_data(file_name_x='test_x.txt',file_name_y= 'test_y.txt')
-    per = perceptron.Perceptron(train_x, train_y, test_x,test_y)
-    per.perceptron_training()
-    per.perceptron_test()
+    # per = perceptron.Perceptron(train_x, train_y, test_x,test_y)
+    # per.perceptron_training()
+    # per.perceptron_test()
+    pa = PassiveAgressive.passiveAgressive(train_x,train_y,test_x,test_y)
+    pa.training()
+    pa.pa_test()
     #print()
 
 if __name__ == '__main__':
