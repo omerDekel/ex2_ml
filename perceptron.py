@@ -28,6 +28,7 @@ class Perceptron:
             if (v.max() - v.min() != 0):
                 array[:, i] = (v - v.min()) / (v.max() - v.min())
         return array
+        
         """
                 for i in range(data):
             for i,x in enumerate(line):
