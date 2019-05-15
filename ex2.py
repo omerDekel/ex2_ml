@@ -4,7 +4,7 @@ import sys
 import SVM
 import perceptron
 import PassiveAgressive
-
+#
 
 def zscore_normalization(data):
     data = np.array(data)
