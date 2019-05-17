@@ -153,27 +153,26 @@ def main():
     train_x = parse_data(sys.argv[1])
     test_x = parse_data(sys.argv[3])
     train_y = np.genfromtxt(sys.argv[2], dtype="int")
-    test_x = np.array(test_x)
+    #test_x = np.array(test_x)
     #train_x = np.array(train_x)
-    mean_vec, std_vec = calculate_stddev_mean(train_x)
     #train_x = zscore_normalization(train_x)
-    mini, max = calculate_minmax_vec(train_x)
+    #mini, maxi = calculate_minmax_vec(train_x)
 
     mapIndexPosition = list(zip(train_x, train_y))
     random.shuffle(mapIndexPosition)
     train_x, train_y = zip(*mapIndexPosition)
     #train_x = min_max_norm(train_x)
     #train
-    # test_y = np.genfromtxt('test_y.txt', dtype="int")
+    #test_y = np.genfromtxt('test_y.txt', dtype="int")
     # mtrain_x = train_x[:int(len(train_x)*0.8)]
     # mtrain_y = train_y[:int(len(train_y)*0.8)]
     # mtest_x = train_x[int(len(train_y)*0.8):]
     # mtest_y = train_y[int(len(train_y)*0.8):]
-    # mtrain_x = min_max_norm(mtrain_x)
-    # mtest_x = min_max_norm_test(mtest_x,mini,max)
-    mtrain_x = zscore_test(train_x,std_vec, mean_vec)
-    mtest_x = zscore_test(train_y,std_vec, mean_vec)
-    cross_validation(mtrain_x, mtest_x, train_x, train_y, 5)
+    # mtrain_x = min_max_norm(train_x)
+    # mtest_x = min_max_norm_test(test_x,mini,maxi)
+    # mtrain_x = zscore_test(train_x,std_vec, mean_vec)
+    # mtest_x = zscore_test(test_x,std_vec, mean_vec)
+    cross_validation(train_x,train_y,6)
     # per = perceptron.Perceptron(mtrain_x, mtrain_y)
     # per.perceptron_training()
     # per.perceptron_test(mtest_x,mtest_y)
@@ -183,40 +182,47 @@ def main():
     #
     # for x in test_x:
     #     print("perceptron: {0}, svm: {1}, pa: {2}".format(per.answer(x), SVM.answer(x), pa.answer(x)))
-def cross_validation(X_train, X_test, Y_train, Y_test, K):
+def cross_validation(X_train, Y_train, K):
     #per.perceptron_training()
     #svm = SVM()
     #pa.training()
     per_success = 0
     svm_success = 0
     pa_success = 0
-    X_train_test = np.concatenate((X_train, X_test))
-    Y_train_test = np.concatenate((Y_train, Y_test))
-    splitted_X = np.array_split(X_train_test, K, axis=0)
-    splitted_Y = np.array_split(Y_train_test, K, axis=0)
+    # X_train_test = np.concatenate((X_train, X_test))
+    # Y_train_test = np.concatenate((Y_train, Y_test))
+    splitted_X = np.array_split(X_train, K, axis=0)
+    splitted_Y = np.array_split(Y_train, K, axis=0)
     for i in range(0, K):
-
-        z, w = splitted_X[:i + 1], splitted_X[i + 2:]
         X_tr =  np.concatenate([splitted_X[i] for i in range(K) if K != i], axis=0)
         Y_tr = np.concatenate([splitted_Y[i] for i in range(K) if K != i], axis=0)
+        mean_vec, std_vec = calculate_stddev_mean(X_tr)
+        X_tr = zscore_test(X_tr, std_vec, mean_vec)
         X_tst = splitted_X[i]
+        X_tst = zscore_test(X_tst, std_vec, mean_vec)
+
         Y_tst = splitted_Y[i]
-        per = perceptron.Perceptron(X_tr, Y_tr)
+        # mini, maxi = calculate_minmax_vec(X_tr)
+        # X_tst = min_max_norm_test(X_tst, mini, maxi)
+        # X_tr= min_max_norm_test(X_tr, mini, maxi)
+        # per = perceptron.Perceptron(X_tr, Y_tr)
         pa = PassiveAgressive.passiveAgressive(X_tr, Y_tr)
-
-        per.perceptron_training()
+        # svm = SVM.svm(X_tr,Y_tr)
+        # svm.svm_training()
+        #
+        # per.perceptron_training()
         # per.perceptron_test(mtest_x,mtest_y)
-        per_success += per.perceptron_test(X_tst, Y_tst)
-
-        # svm.train(X_tr, Y_tr, epochs)
-        # svm_success += svm.test(X_tst, Y_tst)
+        # per_success += per.perceptron_test(X_tst, Y_tst)
+        #
+        # # svm.train(X_tr, Y_tr, epochs)
+        # svm_success += svm.svm_test(X_tst, Y_tst)
 
         pa.training()
         pa_success +=  pa.pa_test(X_tst, Y_tst)
 
     # print avg. success
-    print("perceptron success:" + str(per_success/K))
-    #print("svm success:" + str(svm_success / K))
+    # print("perceptron success:" + str(per_success/K))
+    # print("svm success:" + str(svm_success / K))
     print("pa success:" + str(pa_success / K))
 
 if __name__ == '__main__':

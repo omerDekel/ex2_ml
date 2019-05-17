@@ -4,10 +4,33 @@ from scipy import stats
 import numpy as np
 
 
-class SVM:
+class svm:
     """
 
     """
+    def __init__(self,train_x = "", train_y = ""):
+        """
+
+        :param train_x:
+        :param train_y:
+        """
+        #self.weights = np.zeros((3,10))
+        self.weights = np.random.uniform(-0.08, 0.08, [3, 10])
+        #self.train_x = stats.zscore(train_x)
+        #self.train_x = self.min_max_norm(train_x)
+        self.train_x = np.array(train_x)
+        #self.train_x = self.zscore_normalization(train_x)
+        #self.train_x = np.array(train_x)
+        #self.train_x = self.min_max_norm(train_x)
+        #self.train_y = np.array(train_y)
+        self.train_y = train_y
+        #self.test = stats.zscore(test)
+        #test = np.array(test)
+        #self.test =  self.min_max_norm(test)
+        #self.test = self.zscore_normalization(test)
+        #self.test = test
+        # self.test_x = test_x
+        # self.test_y = test_y
     def zscore_normalization(self,data):
         """
 
@@ -38,30 +61,6 @@ class SVM:
         return data
 
 
-    def _init_(self ,train_x = "", train_y = "", test_x = "", test_y = ""):
-        """
-
-        :param train_x:
-        :param train_y:
-        """
-        #self.weights = np.zeros((3,10))
-        self.weights = np.random.uniform(-0.08, 0.08, [3, 10])
-        #self.train_x = stats.zscore(train_x)
-        #self.train_x = self.min_max_norm(train_x)
-        self.train_x = np.array(train_x)
-        #self.train_x = self.zscore_normalization(train_x)
-        #self.train_x = np.array(train_x)
-        #self.train_x = self.min_max_norm(train_x)
-        #self.train_y = np.array(train_y)
-        self.train_y = train_y
-        #self.test = stats.zscore(test)
-        #test = np.array(test)
-        #self.test =  self.min_max_norm(test)
-        #self.test = self.zscore_normalization(test)
-        #self.test = test
-        self.test_x = test_x
-        self.test_y = test_y
-
     def svm_training(self):
         """
 
@@ -90,8 +89,8 @@ class SVM:
                         if i != i_y and i != y_hat:
                             self.weights[i, :] *= (1 - etha * lambda_)
 
-            self.svm_test(self.test_x, self.test_y)
-
+            # self.svm_test(self.test_x, self.test_y)
+            #
             if(etha - old_etha > delta):
                 etha /= (0.2 * e + 1)
 
@@ -115,7 +114,8 @@ class SVM:
         M_per = 0
         for x, i_y in zip(test_x, test_y):
             y_hat = np.argmax(np.dot(self.weights, x))
-            if (i_y != y_hat):
+            if (i_y == y_hat):
                 M_per = M_per + 1
             #print (y_hat)
-        print ("svm err" , float(M_per)/m)
+        return (float(M_per)/m)
+        #print ("svm err" , float(M_per)/m)

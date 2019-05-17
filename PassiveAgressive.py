@@ -56,7 +56,7 @@ class passiveAgressive:
         :return:
 
         """
-        epohes = 30
+        epohes = 40
         for e in range(epohes):
             # mapIndexPosition = list(zip(self.train_x, self.train_y))
             # random.shuffle(mapIndexPosition)
