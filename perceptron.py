@@ -65,8 +65,8 @@ class Perceptron:
 
         :return:
         """
-        etha = 0.1
-        epochs = 30
+        etha = 0.01
+        epochs = 10
         for e in range(epochs):
             mapIndexPosition = list(zip(self.train_x, self.train_y))
             random.shuffle(mapIndexPosition)
@@ -76,7 +76,7 @@ class Perceptron:
                 if (i_y != y_hat):
                     self.weights[i_y,:] = self.weights[i_y,:] + etha* x
                     self.weights[y_hat,:] = self.weights[y_hat,:] - etha*x
-            #etha /= (e+1)
+            etha /= (e+1)
     def answer(self,xi):
         """
 
@@ -96,7 +96,9 @@ class Perceptron:
         M_per = 0
         for x, i_y in zip(test_x, test_y):
             y_hat = np.argmax(np.dot(self.weights, x))
-            if (i_y != y_hat):
+            if (i_y == y_hat):
                 M_per = M_per + 1
-            print (y_hat)
-        print ("perceptron err" , float(M_per)/m)
+            #print (y_hat)
+        #print ("perceptron err" , float(M_per)/m)
+        return (float(M_per)/m)
+

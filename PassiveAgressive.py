@@ -35,8 +35,8 @@ class passiveAgressive:
                 data[:, i] = (v - v.min()) / (v.max() - v.min())
         return data
     def __init__(self ,train_x = "", train_y = "",test = "",test_y=""):
-        self.weights = np.zeros((3, 10))
-        # self.weights = np.random.uniform(-0.08, 0.08, [3, 10])
+        #self.weights = np.zeros((3, 10))
+        self.weights = np.random.uniform(-0.08, 0.08, [3, 10])
         #self.train_x = stats.zscore(train_x)
         #self.train_x = self.min_max_norm(train_x)
         self.train_x=np.array(train_x)
@@ -56,7 +56,7 @@ class passiveAgressive:
         :return:
 
         """
-        epohes = 70
+        epohes = 30
         for e in range(epohes):
             # mapIndexPosition = list(zip(self.train_x, self.train_y))
             # random.shuffle(mapIndexPosition)
@@ -79,9 +79,10 @@ class passiveAgressive:
         M_per = 0
         for x, i_y in zip(test_x, test_y):
             y_hat = np.argmax(np.dot(self.weights, x))
-            if (i_y != int(y_hat)):
+            if (i_y == int(y_hat)):
                 M_per = M_per + 1
                 #print (y_hat)
-        print("pa err", float(M_per) / m)
+        #print("pa err", float(M_per) / m)
+        return  float(M_per) / m
     def answer(self,xi):
         return np.argmax(np.dot(self.weights,xi))
