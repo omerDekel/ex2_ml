@@ -172,7 +172,7 @@ def main():
     # mtest_x = min_max_norm_test(test_x,mini,maxi)
     # mtrain_x = zscore_test(train_x,std_vec, mean_vec)
     # mtest_x = zscore_test(test_x,std_vec, mean_vec)
-    cross_validation(train_x,train_y,6)
+    cross_validation(train_x,train_y,5)
     # per = perceptron.Perceptron(mtrain_x, mtrain_y)
     # per.perceptron_training()
     # per.perceptron_test(mtest_x,mtest_y)
@@ -196,24 +196,24 @@ def cross_validation(X_train, Y_train, K):
     for i in range(0, K):
         X_tr =  np.concatenate([splitted_X[i] for i in range(K) if K != i], axis=0)
         Y_tr = np.concatenate([splitted_Y[i] for i in range(K) if K != i], axis=0)
-        # mean_vec, std_vec = calculate_stddev_mean(X_tr)
-        # X_tr = zscore_test(X_tr, std_vec, mean_vec)
+        #mean_vec, std_vec = calculate_stddev_mean(X_tr)
+        #X_tr = zscore_test(X_tr, std_vec, mean_vec)
         X_tst = splitted_X[i]
-        # X_tst = zscore_test(X_tst, std_vec, mean_vec)
+        #X_tst = zscore_test(X_tst, std_vec, mean_vec)
 
         Y_tst = splitted_Y[i]
         mini, maxi = calculate_minmax_vec(X_tr)
         X_tst = min_max_norm_test(X_tst, mini, maxi)
         X_tr= min_max_norm_test(X_tr, mini, maxi)
-        per = perceptron.Perceptron(X_tr, Y_tr)
+        # per = perceptron.Perceptron(X_tr, Y_tr)
         pa = PassiveAgressive.passiveAgressive(X_tr, Y_tr)
-        svm = SVM.svm(X_tr,Y_tr)
-        svm.svm_training()
+        # svm = SVM.svm(X_tr,Y_tr)
+        # svm.svm_training()
         #
-        per.perceptron_training()
-        per_success += per.perceptron_test(X_tst, Y_tst)
-
-        svm_success += svm.svm_test(X_tst, Y_tst)
+        # per.perceptron_training()
+        # per_success += per.perceptron_test(X_tst, Y_tst)
+        #
+        # svm_success += svm.svm_test(X_tst, Y_tst)
 
         pa.training()
         pa_success +=  pa.pa_test(X_tst, Y_tst)

@@ -56,7 +56,7 @@ class passiveAgressive:
         :return:
 
         """
-        epohes = 40
+        epohes = 15
         for e in range(epohes):
             # mapIndexPosition = list(zip(self.train_x, self.train_y))
             # random.shuffle(mapIndexPosition)
@@ -65,7 +65,11 @@ class passiveAgressive:
                 y_hat = np.argmax(np.dot(self.weights, x))
                 if (i_y != y_hat):
                     loss = max(0, 1 - np.dot(self.weights[i_y,:], x) + np.dot(self.weights[y_hat,:], x))
-                    tau = loss / (2 * (np.power(np.linalg.norm(x, ord=2), 2)))
+                    denom =  (2 * (np.power(np.linalg.norm(x, ord=2), 2)))
+                    if denom != 0:
+                        tau = loss / denom
+                    else:
+                        tau = 0
                     self.weights[i_y, :] += tau* x
                     self.weights[y_hat, :] -= tau* x
     def pa_test(self,test_x,test_y):
